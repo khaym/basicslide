@@ -77,7 +77,24 @@ These files define the design language. Your generated CSS must work within this
 
 ### Phase 1: Generate Slides
 
-Write the Marp Markdown file. The frontmatter `style` block is your **complete visual layer**.
+Write the Marp Markdown file. The `<style>` tag after the frontmatter is your **complete visual layer**.
+
+**IMPORTANT: Always use a `<style>` tag in the Markdown body — NOT the frontmatter `style:` field.** The font-size pre-check script (`check-font-size.sh`) parses `<style>` tags only. CSS in the frontmatter `style:` field will be invisible to the checker and bypass font-size validation.
+
+```markdown
+---
+marp: true
+theme: basicslide
+paginate: true
+---
+
+<style>
+/* All your CSS here */
+</style>
+
+<!-- _class: title -->
+...
+```
 
 **If evaluator_feedback is present** (refinement mode): Read the feedback carefully and apply targeted fixes. Do not redesign from scratch — preserve the existing visual concept while addressing specific issues.
 
@@ -88,7 +105,7 @@ Write the Marp Markdown file. The frontmatter `style` block is your **complete v
 - Add `lead` divider slides between major topic transitions (e.g., company info → business → working style)
 
 **Rules:**
-- All CSS goes in the frontmatter `style` block — never modify theme files
+- All CSS goes in a `<style>` tag in the Markdown body — never in the frontmatter `style:` field, never modify theme files
 - The base theme provides tokens + structural skeletons; your CSS provides ALL visual personality
 - Use `section.custom-class` patterns for slide-specific styles
 - If you use HTML components (flow, grid, metrics, card, emphasis), you MUST style them — the base theme provides no component CSS
@@ -137,7 +154,7 @@ It does NOT provide: component styles (flow, grid, metrics, card, badge, emphasi
 
 ### Color Palette
 
-Override these CSS variables in the frontmatter `style` block:
+Override these CSS variables in the `<style>` tag:
 
 | Variable | Role |
 |---|---|
