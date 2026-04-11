@@ -38,7 +38,10 @@ Every presentation gets a **unique visual identity** designed from scratch throu
   <img src="assets/aether-01-d-en.png" alt="Concrete Brutalism style" width="720">
 </p>
 
-Both generated from the same input content with different design directions.
+Both generated from the same input content with different design directions. See the briefs for the exact parameters used:
+
+- [Braun Design Manual brief](slides/aether-01-c-brief.md)
+- [Concrete Brutalism brief](slides/aether-01-d-brief.md)
 
 ## How It Works
 
