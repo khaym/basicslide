@@ -1,0 +1,525 @@
+/* @theme basicslide */
+
+/*
+ * basicslide — DADS-based Marp theme (Tokens Layer)
+ *
+ * Design tokens adapted from Digital Agency Design System (DADS)
+ * for presentation context (1280x720 viewport, projected display).
+ *
+ * This file provides:
+ *   - Design tokens (color, typography, spacing, radius, elevation)
+ *   - Base element styles (headings, text, lists, tables, code, etc.)
+ *   - Structural skeletons for slide types (layout only, no visual personality)
+ *
+ * Visual personality (colors, gradients, shapes, component styles) must be
+ * provided by each presentation's style block. See basicslide-components.css
+ * for reference examples.
+ *
+ * Slide types via _class directive:
+ *   title    — Title slide (centered, large heading)
+ *   lead     — Impact/section divider (centered, bold)
+ *   content  — Standard content (heading + body)  [default]
+ *   cols     — Two-column layout
+ *   quote    — Blockquote-focused
+ *   image    — Full-bleed background image
+ */
+
+@import 'default';
+
+/* ==========================================================================
+   1. Design Tokens
+   ========================================================================== */
+
+:root {
+  /* --- Color: Primitives --- */
+  --color-blue-100: #e8f4fd;
+  --color-blue-200: #bde0f7;
+  --color-blue-300: #91ccf1;
+  --color-blue-500: #3aa4e5;
+  --color-blue-600: #1a8ad4;
+  --color-blue-700: #146daa;
+  --color-blue-800: #0f5080;
+  --color-blue-900: #093356;
+
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-420: #949494;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+
+  --color-red-600: #d41a1a;
+  --color-green-600: #1ab81a;
+  --color-yellow-600: #d4b81a;
+  --color-orange-600: #d4711a;
+  --color-purple-600: #711ad4;
+
+  --color-white: #ffffff;
+  --color-black: #171717;
+
+  /* --- Typography --- */
+  --font-sans: "Noto Sans JP", "Yu Gothic Medium", "游ゴシック Medium",
+    YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "メイリオ", sans-serif;
+  --font-mono: "Noto Sans Mono", ui-monospace, monospace;
+
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Slide-adapted sizes (1rem = 20px set on section) */
+  --font-size-xs: 0.7rem;     /* 14px — footnotes */
+  --font-size-sm: 0.8rem;     /* 16px — captions */
+  --font-size-base: 1.1rem;   /* 22px — body text */
+  --font-size-lg: 1.4rem;     /* 28px — large body */
+  --font-size-xl: 1.7rem;     /* 34px — h3 */
+  --font-size-2xl: 2.1rem;    /* 42px — h2 */
+  --font-size-3xl: 2.8rem;    /* 56px — h1 */
+  --font-size-4xl: 3.5rem;    /* 70px — title slide */
+
+  --line-height-none: 1;
+  --line-height-dense: 1.2;
+  --line-height-heading: 1.3;
+  --line-height-body: 1.6;
+  --line-height-relaxed: 1.8;
+
+  --letter-spacing-tight: 0;
+  --letter-spacing-normal: 0.02em;
+  --letter-spacing-wide: 0.04em;
+
+  /* --- Spacing (rem-based, 1rem = 20px) --- */
+  --spacing-1: 0.2rem;    /*  4px */
+  --spacing-2: 0.4rem;    /*  8px */
+  --spacing-3: 0.6rem;    /* 12px */
+  --spacing-4: 0.8rem;    /* 16px */
+  --spacing-5: 1rem;      /* 20px */
+  --spacing-6: 1.2rem;    /* 24px */
+  --spacing-8: 1.6rem;    /* 32px */
+  --spacing-10: 2rem;     /* 40px */
+  --spacing-12: 2.4rem;   /* 48px */
+  --spacing-16: 3.2rem;   /* 64px */
+
+  /* --- Border Radius --- */
+  --radius-none: 0;
+  --radius-sm: 0.4rem;    /*  8px */
+  --radius-md: 0.6rem;    /* 12px */
+  --radius-lg: 0.8rem;    /* 16px */
+  --radius-full: 9999px;
+
+  /* --- Elevation --- */
+  --shadow-0: none;
+  --shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-2: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-3: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-4: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-5: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+}
+
+
+/* ==========================================================================
+   2. Base Styles
+   ========================================================================== */
+
+section {
+  /* --- Color: Semantic (override these via style directive) --- */
+  --color-primary: var(--color-blue-700);
+  --color-primary-light: var(--color-blue-100);
+  --color-primary-hover: var(--color-blue-800);
+  --color-primary-dark: var(--color-blue-900);
+  --color-primary-muted: var(--color-blue-200);
+  --color-primary-soft: var(--color-blue-300);
+  --color-primary-deep: var(--color-blue-800);
+
+  --color-surface: var(--color-white);
+  --color-surface-secondary: var(--color-gray-50);
+  --color-surface-accent: var(--color-blue-100);
+
+  --color-border: var(--color-gray-200);
+  --color-border-strong: var(--color-gray-400);
+
+  --color-text: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-tertiary: var(--color-gray-420);
+  --color-text-inverse: var(--color-white);
+
+  --color-link: var(--color-blue-600);
+  --color-link-hover: var(--color-blue-500);
+
+  --color-success: var(--color-green-600);
+  --color-error: var(--color-red-600);
+  --color-warning: var(--color-yellow-600);
+
+  --color-success-light: #e8fde8;
+  --color-error-light: #fde8e8;
+  --color-warning-light: #fdf8e8;
+
+  /* --- Accent Shape Tokens (override per presentation via style directive) --- */
+  --accent-color: var(--color-primary);
+  --accent-color-soft: var(--color-primary-muted);
+  --accent-opacity: 0.35;
+
+  /* --- Base Styles --- */
+  font-family: var(--font-sans);
+  /* 20px rem anchor — do NOT use var() or rem here.
+     Marpit sets --marpit-root-font-size from this value; using a variable
+     that itself depends on --marpit-root-font-size creates a circular
+     reference, collapsing 1rem to the browser default 16px.
+     Body text inherits 20px; use --font-size-base (22px) for emphasis. */
+  font-size: 20px;
+  font-weight: var(--font-weight-normal);
+  font-feature-settings: "palt";
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-normal);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  padding: var(--spacing-12) var(--spacing-16);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+/* --- Headings --- */
+
+section h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-8);
+}
+
+section h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  color: var(--color-text);
+  padding-bottom: var(--spacing-2);
+  margin-bottom: var(--spacing-6);
+  flex-shrink: 0;
+}
+
+section h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-4);
+}
+
+section h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-3);
+}
+
+/* --- Body text --- */
+
+section p {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-4);
+}
+
+section strong {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+section em {
+  /* Avoid italic for Japanese — use color emphasis instead */
+  font-style: normal;
+  color: var(--color-primary);
+}
+
+/* --- Links --- */
+
+section a {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+/* --- Lists --- */
+
+section ul,
+section ol {
+  margin-bottom: var(--spacing-4);
+  padding-left: var(--spacing-8);
+}
+
+section li {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-2);
+  line-height: var(--line-height-body);
+}
+
+section li::marker {
+  color: var(--color-primary);
+}
+
+/* Nested list spacing */
+section li > ul,
+section li > ol {
+  margin-top: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+/* --- Blockquote --- */
+
+section blockquote {
+  background-color: var(--color-surface-secondary);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: var(--spacing-6);
+  margin: var(--spacing-6) 0;
+  box-shadow: var(--shadow-2);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+section blockquote p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* --- Code --- */
+
+section code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--color-surface-secondary);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-1) var(--spacing-2);
+  color: var(--color-primary-hover);
+}
+
+section pre {
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+  margin: var(--spacing-6) 0;
+  box-shadow: var(--shadow-3);
+  overflow-x: auto;
+}
+
+section pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+
+/* --- Table --- */
+
+section table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none;
+  margin: var(--spacing-6) 0;
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+section table th,
+section table td {
+  border: none;
+}
+
+section table tr {
+  border-top: none;
+  background-color: transparent;
+}
+
+section tbody tr:last-child td {
+  border-bottom: none;
+}
+
+section thead th {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+}
+
+section tbody td {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+section tbody tr:nth-child(even) {
+  background-color: var(--color-surface-secondary);
+}
+
+/* --- Horizontal rule (slide-internal separator) --- */
+
+section hr {
+  border: none;
+  border-top: 2px solid var(--color-border);
+  margin: var(--spacing-8) 0;
+}
+
+/* --- Images --- */
+
+section img {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-3);
+}
+
+/* --- Page number --- */
+
+section::after {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* --- Header / Footer --- */
+
+section header,
+section footer {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+
+/* ==========================================================================
+   3. Slide Type Skeletons — Layout only, no visual personality
+   These provide structural foundations that the style block builds upon.
+   ========================================================================== */
+
+/* --- Title: centered layout, no page number --- */
+
+section.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-16);
+}
+
+section.title h1 {
+  border: none;
+  margin-bottom: var(--spacing-6);
+}
+
+section.title h2 {
+  border: none;
+  padding-bottom: 0;
+  margin-bottom: var(--spacing-4);
+}
+
+section.title::after {
+  display: none;
+}
+
+/* --- Lead: centered layout for impact --- */
+
+section.lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-16);
+}
+
+section.lead h2 {
+  border: none;
+  padding-bottom: 0;
+}
+
+/* --- Cols: two-column grid --- */
+
+section.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: var(--spacing-8);
+  align-items: start;
+}
+
+section.cols h2 {
+  grid-column: 1 / -1;
+}
+
+section.cols .left,
+section.cols .right {
+  min-width: 0;
+}
+
+/* --- Quote: centered blockquote --- */
+
+section.quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-12) var(--spacing-16);
+}
+
+section.quote > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* --- Image: background image with gradient overlay --- */
+
+section.image {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--spacing-12) var(--spacing-16);
+  color: var(--color-text-inverse);
+  background-size: cover;
+  background-position: center;
+}
+
+section.image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.7) 0%,
+    rgb(0 0 0 / 0.2) 50%,
+    transparent 100%
+  );
+  z-index: 0;
+}
+
+section.image > * {
+  position: relative;
+  z-index: 1;
+}
+
+section.image h1,
+section.image h2,
+section.image h3 {
+  color: var(--color-text-inverse);
+  border: none;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+
+section.image p {
+  color: rgb(255 255 255 / 0.9);
+}
+
+section.image::after {
+  color: rgb(255 255 255 / 0.6);
+}

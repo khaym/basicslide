@@ -1,0 +1,8 @@
+{
+  "name": "basicslide",
+  "description": "Marp slide generation with bespoke visual design. Orchestrates interactive design thinking, delegating to worker and evaluator SubAgents. Includes the basicslide theme and build tools.",
+  "version": "1.0.0",
+  "author": {
+    "name": "khaym"
+  }
+}

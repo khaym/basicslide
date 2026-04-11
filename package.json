@@ -1,0 +1,19 @@
+{
+  "name": "basicslide",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "marp",
+    "build:pdf": "marp --pdf",
+    "build:images": "marp --images png",
+    "build:one": "bash scripts/build-one.sh",
+    "preview": "marp --server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.3.1"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "basicslide",
+  "owner": { "name": "khaym" },
+  "metadata": {
+    "description": "Marp slide generation plugin with bespoke visual design, interactive design thinking, and automated evaluation."
+  },
+  "plugins": [
+    {
+      "name": "basicslide",
+      "source": "./plugins/basicslide",
+      "description": "Orchestrates Marp slide generation with bespoke visual design using the basicslide theme. Includes slide-gen orchestrator, worker, and evaluator SubAgents.",
+      "version": "1.0.0"
+    }
+  ]
+}

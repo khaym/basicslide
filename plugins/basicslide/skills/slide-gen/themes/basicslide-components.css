@@ -1,0 +1,917 @@
+/*
+ * basicslide-components — Reference CSS for slide-gen
+ *
+ * This file is NOT a Marp theme. It is reference material showing the
+ * default component, slide-type, and shape styles that were originally
+ * part of basicslide.css.
+ *
+ * When generating a new presentation, the slide-gen skill reads this file
+ * for inspiration. The generated style block must provide its OWN visual
+ * CSS — do not copy these styles verbatim.
+ *
+ * The motif and accent-shape sections are preserved as comparison baselines
+ * to evaluate whether bespoke designs surpass template-based approaches.
+ */
+
+
+/* ==========================================================================
+   Slide Type: title
+   Centered title slide for presentation opening / section breaks.
+   Usage: <!-- _class: title -->
+   ========================================================================== */
+
+section.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-16);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  color: var(--color-text-inverse);
+}
+
+section.title h1 {
+  font-size: var(--font-size-4xl);
+  color: var(--color-text-inverse);
+  border: none;
+  margin-bottom: var(--spacing-6);
+}
+
+section.title h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-primary-muted);
+  border: none;
+  padding-bottom: 0;
+  margin-bottom: var(--spacing-4);
+}
+
+section.title p {
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-muted);
+}
+
+section.title::after {
+  display: none;
+}
+
+
+/* ==========================================================================
+   Slide Type: lead
+   Impact slide for key messages or section dividers.
+   Usage: <!-- _class: lead -->
+   ========================================================================== */
+
+section.lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-16);
+}
+
+section.lead h1 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-6);
+}
+
+section.lead h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+  border: none;
+  padding-bottom: 0;
+}
+
+section.lead p {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  max-width: 80%;
+}
+
+
+/* ==========================================================================
+   Slide Type: cols
+   Two-column layout using Marp's column split pattern.
+   Usage: <!-- _class: cols -->
+   ========================================================================== */
+
+section.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: var(--spacing-8);
+  align-items: start;
+}
+
+section.cols h2 {
+  grid-column: 1 / -1;
+}
+
+section.cols .left,
+section.cols .right {
+  min-width: 0;
+}
+
+
+/* ==========================================================================
+   Slide Type: quote
+   Blockquote-focused slide for impactful citations.
+   Usage: <!-- _class: quote -->
+   ========================================================================== */
+
+section.quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-12) var(--spacing-16);
+}
+
+section.quote > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+section.quote blockquote {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  background-color: transparent;
+  border-left: 6px solid var(--color-primary);
+  box-shadow: none;
+  padding: var(--spacing-6) var(--spacing-8);
+  margin: 0;
+  color: var(--color-text);
+}
+
+section.quote p:last-child {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: right;
+  padding-top: var(--spacing-6);
+  width: 100%;
+}
+
+
+/* ==========================================================================
+   Slide Type: image
+   Full-bleed background image with text overlay.
+   Usage: <!-- _class: image -->
+   ========================================================================== */
+
+section.image {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--spacing-12) var(--spacing-16);
+  color: var(--color-text-inverse);
+  background-size: cover;
+  background-position: center;
+}
+
+section.image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.7) 0%,
+    rgb(0 0 0 / 0.2) 50%,
+    transparent 100%
+  );
+  z-index: 0;
+}
+
+section.image > * {
+  position: relative;
+  z-index: 1;
+}
+
+section.image h1,
+section.image h2,
+section.image h3 {
+  color: var(--color-text-inverse);
+  border: none;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+
+section.image p {
+  color: rgb(255 255 255 / 0.9);
+}
+
+section.image::after {
+  color: rgb(255 255 255 / 0.6);
+}
+
+
+/* ==========================================================================
+   Utility: Card
+   Elevated content block within any slide.
+   Usage (HTML mode): <div class="card">...</div>
+   ========================================================================== */
+
+section .card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-3);
+}
+
+section .card h1,
+section .card h2,
+section .card h3,
+section .card h4,
+section .card h5,
+section .card h6 {
+  margin-top: 0 !important;
+  margin-bottom: var(--spacing-3);
+}
+
+section .card p:last-child,
+section .card ul:last-child,
+section .card ol:last-child {
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================================
+   Utility: Badge / Chip
+   Small inline labels.
+   Usage (HTML mode): <span class="badge">Label</span>
+   ========================================================================== */
+
+section .badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+section .badge-success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+section .badge-error {
+  background-color: var(--color-error-light);
+  color: var(--color-error);
+}
+
+section .badge-warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+
+/* ==========================================================================
+   Utility: Emphasis box
+   Highlighted content area with accent background.
+   Usage (HTML mode): <div class="emphasis">...</div>
+   ========================================================================== */
+
+section .emphasis {
+  background-color: var(--color-surface-accent);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+  margin: var(--spacing-4) 0;
+}
+
+section .emphasis p,
+section .emphasis ul,
+section .emphasis ol {
+  margin-bottom: 0 !important;
+}
+
+section .emphasis strong {
+  color: var(--color-primary);
+}
+
+
+/* ==========================================================================
+   Utility: Grid
+   Horizontal card grid (2-4 columns).
+   Usage (HTML mode):
+     <div class="grid">
+       <div class="grid-item">...</div>
+       <div class="grid-item">...</div>
+       <div class="grid-item">...</div>
+     </div>
+   ========================================================================== */
+
+section .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+  margin: var(--spacing-6) 0;
+  width: 100%;
+}
+
+section .grid-item {
+  background-color: var(--color-surface-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+section .grid-item .icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-4);
+  line-height: var(--line-height-none);
+}
+
+section .grid-item h3,
+section .grid-item h4 {
+  margin-top: 0 !important;
+  margin-bottom: var(--spacing-3);
+  font-size: var(--font-size-lg);
+}
+
+section .grid-item p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: 0 !important;
+}
+
+section.invert .grid-item {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+
+/* ==========================================================================
+   Dark variant
+   Add `invert` class alongside any slide type for dark background.
+   Usage: <!-- _class: invert --> or <!-- _class: lead invert -->
+   ========================================================================== */
+
+section.invert {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-100);
+  --color-text: var(--color-gray-100);
+  --color-text-secondary: var(--color-gray-300);
+  --color-text-tertiary: var(--color-gray-400);
+  --color-border: var(--color-gray-700);
+  --color-surface-secondary: var(--color-gray-800);
+  --color-surface-accent: var(--color-primary-dark);
+}
+
+section.invert h1 {
+  color: var(--color-primary-soft);
+}
+
+section.invert h2 {
+  color: var(--color-gray-100);
+  border-bottom-color: var(--color-primary-soft);
+}
+
+section.invert h3 {
+  color: var(--color-gray-200);
+}
+
+section.invert h4 {
+  color: var(--color-gray-400);
+}
+
+section.invert em {
+  color: var(--color-primary-soft);
+}
+
+section.invert li::marker {
+  color: var(--color-primary-soft);
+}
+
+section.invert blockquote {
+  background-color: var(--color-gray-800);
+  border-left-color: var(--color-primary-soft);
+  color: var(--color-gray-300);
+}
+
+section.invert code {
+  background-color: var(--color-gray-800);
+  color: var(--color-primary-soft);
+}
+
+section.invert thead th {
+  background-color: var(--color-primary-deep);
+}
+
+section.invert tbody td {
+  border-bottom-color: var(--color-gray-700);
+}
+
+section.invert tbody tr:nth-child(even) {
+  background-color: var(--color-gray-800);
+}
+
+section.invert .card {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+section.invert .badge {
+  background-color: var(--color-primary-dark);
+  color: var(--color-primary-soft);
+}
+
+section.invert .emphasis {
+  background-color: var(--color-primary-dark);
+}
+
+section.invert::after {
+  color: var(--color-gray-500);
+}
+
+section.invert hr {
+  border-top-color: var(--color-gray-700);
+}
+
+
+/* ==========================================================================
+   Utility: Flow
+   Horizontal step-by-step flow (2-5 steps).
+   Usage (HTML mode):
+     <div class="flow">
+       <div class="flow-step">
+         <div class="flow-num">1</div>
+         <h4>Step title</h4>
+         <p>Description</p>
+       </div>
+     </div>
+   ========================================================================== */
+
+section .flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-6);
+  margin: var(--spacing-6) 0;
+  width: 100%;
+  align-items: stretch;
+}
+
+section .flow-step {
+  background-color: var(--color-surface-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-5) var(--spacing-5) var(--spacing-5) var(--spacing-5);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+section .flow-step:not(:last-child)::after {
+  content: "\2192";
+  position: absolute;
+  right: calc(var(--spacing-6) * -1 + 0.15em);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size-base);
+  color: var(--color-border-strong);
+  z-index: 1;
+}
+
+section .flow-num {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-2);
+  line-height: var(--line-height-none);
+}
+
+section .flow-step h4 {
+  margin-top: 0 !important;
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+section .flow-step p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: 0 !important;
+}
+
+section.invert .flow-step {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+section.invert .flow-num {
+  color: var(--color-primary-soft);
+}
+
+section.invert .flow-step:not(:last-child)::after {
+  color: var(--color-gray-500);
+}
+
+
+/* ==========================================================================
+   Utility: Metric
+   Large number display for key metrics (2-4 items).
+   Usage (HTML mode):
+     <div class="metrics">
+       <div class="metric">
+         <div class="metric-value">42%</div>
+         <div class="metric-label">Conversion Rate</div>
+       </div>
+     </div>
+   ========================================================================== */
+
+section .metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-6);
+  margin: var(--spacing-6) 0;
+  width: 100%;
+}
+
+section .metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-6);
+}
+
+section .metric-value {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: var(--line-height-none);
+  margin-bottom: var(--spacing-3);
+}
+
+section .metric-label {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+section.invert .metric-value {
+  color: var(--color-primary-soft);
+}
+
+
+/* ==========================================================================
+   Accent Shapes — Decorative shape primitives for visual identity
+
+   Shapes use ::before pseudo-element positioned absolutely within the slide.
+   Composable with all slide types except `image` (which uses ::before
+   for its overlay gradient).
+
+   Tokens (override per presentation via style directive):
+     --accent-color        Shape fill color
+     --accent-color-soft   Lighter shape fill
+     --accent-opacity      Shape opacity (0-1)
+
+   Usage:
+     <!-- _class: accent-triangle -->
+     <!-- _class: lead accent-circle -->
+     <!-- _class: title accent-diagonal -->
+   ========================================================================== */
+
+/* --- Shape base: shared positioning for all accent/motif shapes --- */
+section[class*="accent-"]::before,
+section[class*="motif-"]::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+section[class*="accent-"] > *,
+section[class*="motif-"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Clip shapes that overflow the slide boundary */
+section[class*="accent-"],
+section[class*="motif-"] {
+  overflow: hidden;
+}
+
+
+/* --- Shape 1: Corner Triangle (top-right) ---
+   Personality: Sharp, geometric, professional
+   ========================================================================== */
+
+section.accent-triangle::before {
+  top: 0;
+  right: 0;
+  border-style: solid;
+  border-width: 0 320px 320px 0;
+  border-color: transparent var(--accent-color-soft) transparent transparent;
+  opacity: var(--accent-opacity);
+}
+
+
+/* --- Shape 2: Circle (top-right overflow) ---
+   Personality: Organic, friendly, approachable
+   ========================================================================== */
+
+section.accent-circle::before {
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: var(--accent-color-soft);
+  opacity: var(--accent-opacity);
+  top: -120px;
+  right: -100px;
+}
+
+
+/* --- Shape 3: Diagonal Band (top-left corner) ---
+   Personality: Dynamic, energetic, modern
+   ========================================================================== */
+
+section.accent-diagonal::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--accent-color-soft) 0%,
+    var(--accent-color-soft) 20%,
+    transparent 20.5%
+  );
+}
+
+
+/* --- Shape 4: Dot Grid (top-right corner) ---
+   Personality: Technical, textural, data-oriented
+   ========================================================================== */
+
+section.accent-dots::before {
+  top: 20px;
+  right: 20px;
+  width: 240px;
+  height: 240px;
+  background-image: radial-gradient(
+    circle,
+    var(--accent-color) 2px,
+    transparent 2px
+  );
+  background-size: 20px 20px;
+  opacity: var(--accent-opacity);
+}
+
+
+/* --- Shape 5: Wave (bottom edge) ---
+   Personality: Smooth, approachable, natural
+   ========================================================================== */
+
+section.accent-wave::before {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: var(--accent-color-soft);
+  clip-path: ellipse(55% 100% at 50% 100%);
+  opacity: var(--accent-opacity);
+}
+
+
+/* --- Shape 6: Stripe (diagonal lines) ---
+   Personality: Structured, rhythmic, editorial
+   ========================================================================== */
+
+section.accent-stripe::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 32px,
+    var(--accent-color-soft) 32px,
+    var(--accent-color-soft) 35px
+  );
+  opacity: 0.45;
+}
+
+
+/* --- Shape 7: Gradient Side (right fade) ---
+   Personality: Subtle, corporate, polished
+   ========================================================================== */
+
+section.accent-gradient::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 40%,
+    var(--accent-color-soft) 100%
+  );
+}
+
+
+/* --- Accent Shapes: Dark variant ---
+   Swap soft color to deep variant on dark backgrounds
+   ========================================================================== */
+
+section.invert[class*="accent-"],
+section.invert[class*="motif-"] {
+  --accent-color-soft: var(--color-primary-deep);
+}
+
+/* Title slides already have a dark gradient — use contrasting light accent */
+section.title[class*="accent-"],
+section.title[class*="motif-"] {
+  --accent-color-soft: var(--color-primary-muted);
+  --accent-color: var(--color-primary-muted);
+  --accent-opacity: 0.25;
+}
+
+
+/* ==========================================================================
+   Motif Sets — Coordinated shape elevation per slide type
+
+   A motif applies a consistent accent shape system across all slides.
+   Shape intensity follows elevation: title (bold) > lead (moderate) > content (subtle).
+
+   Usage (combine motif class with slide type on every slide):
+     <!-- _class: motif-geometric -->               content
+     <!-- _class: motif-geometric lead -->           section divider
+     <!-- _class: motif-geometric title -->          opening / closing
+     <!-- _class: motif-geometric invert -->         dark content
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   Motif: Geometric — Sharp angles, technical texture
+   Font: Sans-serif (default) | Shape: triangle -> dots
+   -------------------------------------------------------------------------- */
+
+/* Geometric uses default sans-serif — no font overrides needed */
+
+/* Content: small dot grid (subtle texture, top-right) */
+section.motif-geometric::before {
+  top: 20px;
+  right: 20px;
+  width: 140px;
+  height: 140px;
+  background-image: radial-gradient(
+    circle, var(--accent-color) 2px, transparent 2px
+  );
+  background-size: 20px 20px;
+  opacity: 0.2;
+}
+
+/* Lead: larger dot grid */
+section.motif-geometric.lead::before {
+  width: 240px;
+  height: 200px;
+  opacity: var(--accent-opacity);
+}
+
+/* Title: corner triangle */
+section.motif-geometric.title::before {
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  background-image: none;
+  background-size: auto;
+  border-style: solid;
+  border-width: 0 320px 320px 0;
+  border-color: transparent var(--accent-color-soft) transparent transparent;
+  opacity: var(--accent-opacity);
+}
+
+
+/* --------------------------------------------------------------------------
+   Motif: Organic — Soft curves, natural flow
+   Font: Serif headings | Shape: circle -> wave
+   -------------------------------------------------------------------------- */
+
+/* Organic typography: serif headings for warmth */
+section.motif-organic h1,
+section.motif-organic h2,
+section.motif-organic h3,
+section.motif-organic h4 {
+  font-family: "Noto Serif CJK JP", "Noto Serif", serif;
+}
+
+section.motif-organic h2 {
+  border-bottom: 2px dotted var(--color-primary);
+  padding-bottom: var(--spacing-3);
+}
+
+section.motif-organic.title h1,
+section.motif-organic.title h2 {
+  font-family: "Noto Serif CJK JP", "Noto Serif", serif;
+}
+
+/* Content: small bottom wave */
+section.motif-organic::before {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--accent-color-soft);
+  clip-path: ellipse(55% 100% at 50% 100%);
+  opacity: 0.25;
+}
+
+/* Lead: larger wave */
+section.motif-organic.lead::before {
+  height: 100px;
+  opacity: var(--accent-opacity);
+}
+
+/* Title: circle blob (override wave -> circle) */
+section.motif-organic.title::before {
+  top: -120px;
+  right: -100px;
+  bottom: auto;
+  left: auto;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: var(--accent-color-soft);
+  clip-path: none;
+  opacity: var(--accent-opacity);
+}
+
+
+/* --------------------------------------------------------------------------
+   Motif: Bold — Dynamic diagonals, high energy
+   Font: Tight sans headings | Shape: diagonal -> triangle -> gradient
+   -------------------------------------------------------------------------- */
+
+/* Bold typography: tighter spacing, heavier borders */
+section.motif-bold h1 {
+  letter-spacing: -0.02em;
+}
+
+section.motif-bold h2 {
+  letter-spacing: -0.01em;
+  border-bottom-width: 5px;
+}
+
+section.motif-bold h3 {
+  letter-spacing: -0.01em;
+}
+
+/* Content: subtle side gradient */
+section.motif-bold::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 50%,
+    var(--accent-color-soft) 100%
+  );
+  opacity: 0.5;
+}
+
+/* Lead: moderate corner triangle (override gradient -> triangle) */
+section.motif-bold.lead::before {
+  top: 0;
+  right: 0;
+  left: auto;
+  width: 0;
+  height: 0;
+  background: none;
+  border-style: solid;
+  border-width: 0 220px 220px 0;
+  border-color: transparent var(--accent-color-soft) transparent transparent;
+  opacity: var(--accent-opacity);
+}
+
+/* Title: diagonal band (override gradient direction) */
+section.motif-bold.title::before {
+  background: linear-gradient(
+    135deg,
+    var(--accent-color-soft) 0%,
+    var(--accent-color-soft) 20%,
+    transparent 20.5%
+  );
+  opacity: 1;
+}
