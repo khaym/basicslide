@@ -108,11 +108,17 @@ The plugin will:
 - Generate a complete Marp presentation with bespoke visual design
 - Evaluate and refine until quality passes
 
-### 3. Build to PNG
+### 3. Preview and export
 
 ```bash
+# Live preview in browser
+npx @marp-team/marp-cli --preview slides/my-presentation.md
+
+# Export to PNG
 npm run build:one -- slides/my-presentation.md
 ```
+
+See [Marp CLI](https://github.com/marp-team/marp-cli) for more export options (PDF, PPTX, HTML).
 
 ## Plugin Structure
 
