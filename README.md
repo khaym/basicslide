@@ -20,6 +20,10 @@
   <a href="#license">License</a>
 </p>
 
+<p align="center">
+  <a href="README.ja.md">日本語</a>
+</p>
+
 ---
 
 Every presentation gets a **unique visual identity** designed from scratch through interactive design thinking. You describe the purpose and audience; the plugin handles tone selection, color palettes, typography, layout, and a multi-axis quality evaluation — then iterates until the design holds up.
