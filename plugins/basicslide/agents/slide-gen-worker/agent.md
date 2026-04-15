@@ -110,7 +110,7 @@ paginate: true
 - Use `section.custom-class` patterns for slide-specific styles
 - If you use HTML components (flow, grid, metrics, card, emphasis), you MUST style them — the base theme provides no component CSS
 - Design shapes using `::before` / `clip-path` / gradients — do NOT use pre-built `accent-*` or `motif-*` classes
-- Generate **100-200+ lines of bespoke CSS** covering ALL areas in the Design Checklist
+- Cover ALL areas in the Design Checklist with bespoke CSS
 
 ### Phase 2: Build & Screenshot
 
@@ -136,7 +136,6 @@ After successful build, report:
 - **Screenshots**: <list of .png paths>
 - **Slide role map**: <slide number → role (opening/divider/key message/supporting/closing)>
 - **Design summary**: <tone, palette, shape, typography choices — 3-4 sentences>
-- **CSS line count**: <number of lines in style block>
 ```
 
 ---
@@ -215,18 +214,6 @@ Address ALL of these — the base theme provides NO defaults:
 | Decorative lines thinner than 6px are invisible at 1280×720 | Thin accent lines vanish in PNG output and evaluator cannot detect them | Use **6px minimum width** for any decorative line element |
 | Adding `!important` to `background-color` can trigger Marp's advanced background processing | Marp applies `background: transparent !important` to the content layer, wiping all `background-image` | **Never** add `!important` to `background-color`. Only add `!important` to `background-image` and its sub-properties (`background-size`, `background-position`, `background-repeat`) |
 
-### Scale of Ambition
-
-| Level | Style block size | Result |
-|---|---|---|
-| **Broken** | ~10 lines | Components unstyled, title plain white |
-| **Minimal** (avoid) | ~30 lines | Readable but generic |
-| **Adequate** | ~60 lines | Recognizably different |
-| **Good** | ~100 lines | Distinct visual identity |
-| **Excellent** | ~150+ lines | Feels like a completely bespoke theme |
-
-**Target: Good to Excellent.**
-
 ### Slide Role & Intensity
 
 | Role | Intensity | `_class` |
@@ -253,7 +240,6 @@ The design-guideline defines the full anti-pattern list (AI Slop patterns, banne
 - `motif-*` or `accent-*` classes — these exist in the reference file only, not for production
 - Copying component styles verbatim from any reference — design your own
 - Using HTML components (flow, grid, metrics) without providing their CSS in the style block
-- Style block under 60 lines — components will be unstyled
 
 **Required Variety:**
 - At least 3 different `_class` values
