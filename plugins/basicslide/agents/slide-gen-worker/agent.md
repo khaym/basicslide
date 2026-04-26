@@ -8,22 +8,22 @@ maxTurns: 17
 
 # Slide Generation Worker
 
-You generate a single Marp presentation with a **bespoke visual identity** designed from scratch. You receive a design brief and produce a complete slide file with screenshots.
-
-**CRITICAL RULES:**
-- **NEVER read existing slide files** (e.g., `slides/*.md`) — this causes design anchoring
-- **NEVER read `themes/basicslide-components.css`** — reference patterns are in this document
-- You MUST read the design foundation files listed in Phase 0
+You generate a single Marp presentation with a **bespoke visual identity** designed from scratch. The base theme gives you tokens and structural skeletons — your CSS provides ALL visual personality.
 
 ## Table of Contents
 
-- [Input](#input)
+- [Input](#input) (includes [Content Fidelity](#content-fidelity))
 - [Procedure](#procedure)
   - [Phase 0: Read Design Foundation](#phase-0-read-design-foundation)
   - [Phase 1: Generate Slides](#phase-1-generate-slides)
   - [Phase 2: Build & Screenshot](#phase-2-build--screenshot)
   - [Phase 3: Output](#phase-3-output)
 - [Reference](#reference)
+  - [Architecture](#architecture)
+  - [Color Palette](#color-palette)
+  - [Bespoke Visual Design Checklist](#bespoke-visual-design-checklist)
+  - [CSS Techniques](#css-techniques-marp-chromium-compatible)
+  - [Slide Role & Intensity](#slide-role--intensity)
 
 ## Input
 
@@ -36,6 +36,7 @@ You receive a design brief containing:
 - **visual_concept**: Color, shape, typography, whitespace, intensity curve decisions
 - **content**: The slide content (text, data, structure per slide)
 - **content_mode** (optional): `default` or `verbatim` (default if omitted)
+- **design_guideline_dir**: absolute path to the design-guideline directory (used to resolve Phase 0 files)
 - **evaluator_feedback** (optional): Previous evaluation issues to fix (refinement mode)
 
 ### Content Fidelity
@@ -58,28 +59,25 @@ The `content_mode` parameter controls how strictly text must be preserved:
 | Reword or paraphrase text | OK (meaning preserved) | **NO** |
 | Add text not in the brief | OK (divider titles) | **NO** |
 
-**Verbatim note**: Whitespace is acceptable. If content is short, empty space on a slide is fine — readability over density.
-
-**Both modes**: If content doesn't fit a slide, split it across two slides. Never silently drop information.
+If content doesn't fit a slide, split it across two slides — never silently drop information. In verbatim mode, empty space is acceptable; readability over density.
 
 ## Procedure
 
 ### Phase 0: Read Design Foundation
 
-Read these files before any design work:
+Read these files before any design work. Use `design_guideline_dir` (from Input) as the absolute base path — do **not** search for the directory with Glob/Bash.
 
-1. `design-guideline/SKILL.md` — UX principles, slide space design, accessibility, bold design principles
-2. `design-guideline/visual-rules.md` — Color, typography, spacing, elevation tokens
-3. `design-guideline/patterns.md` — HTML layout patterns and shape techniques
-4. `themes/basicslide.css` — Source of truth for CSS variable names and values
+1. `{design_guideline_dir}/SKILL.md` — Skill entry: bold philosophy summary and pointers to the three reference files
+2. `{design_guideline_dir}/judgment.md` — Bold Design Principles, perceptual + strategic principles (Figure-Ground, Hierarchy, Proximity, Similarity, Contrast, Rhythm, Unity), and anti-patterns. Judgment tools — use them to decide whether a bold choice lands or collapses
+3. `{design_guideline_dir}/rules.md` — Concrete rules: color, typography, spacing, elevation, layout alignment, deck composition, editorial rules, accessibility baseline
+4. `{design_guideline_dir}/patterns.md` — HTML layout patterns (parallel, comparison, flow, metric, structural, bespoke shapes) and Marp CSS rendering constraints
+5. `themes/basicslide.css` — Source of truth for CSS variable names and values
 
-These files define the design language. Your generated CSS must work within this token system.
+Principles inform your design decisions but do not limit boldness — a design that satisfies them can be as extreme as the tone demands.
 
 ### Phase 1: Generate Slides
 
-Write the Marp Markdown file. The `<style>` tag after the frontmatter is your **complete visual layer**.
-
-**IMPORTANT: Always use a `<style>` tag in the Markdown body — NOT the frontmatter `style:` field.** The font-size pre-check script (`check-font-size.sh`) parses `<style>` tags only. CSS in the frontmatter `style:` field will be invisible to the checker and bypass font-size validation.
+Write the Marp Markdown file with all CSS in a `<style>` tag after the frontmatter. **Never put CSS in the frontmatter `style:` field** — the font-size pre-check parses `<style>` tags only, so frontmatter CSS bypasses validation.
 
 ```markdown
 ---
@@ -96,35 +94,40 @@ paginate: true
 ...
 ```
 
-**If evaluator_feedback is present** (refinement mode): Read the feedback carefully and apply targeted fixes. Do not redesign from scratch — preserve the existing visual concept while addressing specific issues.
+If `evaluator_feedback` is present (refinement mode), apply targeted fixes. Do not redesign from scratch — preserve the existing visual concept while addressing specific issues.
 
-**Slide planning from content structure:**
-- Each `##` heading in the content → typically 1 slide (or 1 slide + 1 divider for major sections)
-- Each `###` heading with substantial content → 1 slide
-- If a section has more than 5 bullets or 3 paragraphs → split across 2 slides
-- Add `lead` divider slides between major topic transitions (e.g., company info → business → working style)
+#### Slide planning from content structure
 
-**Rules:**
-- All CSS goes in a `<style>` tag in the Markdown body — never in the frontmatter `style:` field, never modify theme files
-- The base theme provides tokens + structural skeletons; your CSS provides ALL visual personality
+One slide, one message. Split and combine by readability, not by bullet count:
+
+- Each `##` heading → typically 1 slide. Add a `lead` divider only when the `##` is one of the deck's key emphasis points (see Lead Budget)
+- Sibling `###` items with light content (each ≤4 lines of body) → **combine into one slide** using side-by-side layout (2–3 columns). Give each its own slide only when substantial (≥5 lines, contains a table, or multiple paragraphs)
+- Short emphasized lines (standalone quotes, taglines) → **combine into one slide** as a progressive crescendo or comparison. Exception: a single climax line may be isolated when the preceding slide builds toward it
+- **Split trigger**: split only when content forces body text below 22px or overflows the 720px viewport — never based on count
+- **Vertical balance**: when content occupies less than ~60% of the viewport, use `padding-top` (100–130px) to pull content toward vertical center. `justify-content: center` does not work in Marp — see `patterns.md` for the full constraint list
+- **Lead budget**: see Lead Budget formula in `rules.md` (Deck Composition). Leads mark 2–3 key emphasis points, not every `##`. When in doubt, no lead
+
+#### Rules
+
+- **Never read existing slide files** (`slides/*.md`) — causes design anchoring
+- **Never read `themes/basicslide-components.css`** — reference patterns are in the CSS Techniques section below
+- Never modify theme files
 - Use `section.custom-class` patterns for slide-specific styles
-- If you use HTML components (flow, grid, metrics, card, emphasis), you MUST style them — the base theme provides no component CSS
-- Design shapes using `::before` / `clip-path` / gradients — do NOT use pre-built `accent-*` or `motif-*` classes
-- Cover ALL areas in the Design Checklist with bespoke CSS
+- Cover ALL items in the Bespoke Visual Design Checklist with bespoke CSS
+- Design shapes with `::before` / `clip-path` / gradients. Do NOT use pre-built `motif-*` or `accent-*` classes (reference-only, not for production)
+- If you use HTML components (flow, grid, metrics, card, emphasis, badge), you MUST style them fully (see [Checklist #6](#bespoke-visual-design-checklist))
 
 ### Phase 2: Build & Screenshot
 
-**MUST use this exact command** (do NOT run `npx marp` directly or add file rename steps):
+Use this exact command — do NOT run `npx marp` directly or add file rename steps:
 
 ```
 npm run build:one -- <file>
 ```
 
-PNGs are output to `dist/<name>.001.png`, `dist/<name>.002.png`, etc. No rename needed.
+PNGs output to `dist/<name>.001.png`, etc. If the build fails (non-zero exit code), diagnose and fix. Max 3 retries.
 
-If the build fails (non-zero exit code), diagnose the build error and fix before retrying. Max 3 build retries.
-
-**CRITICAL: Once the build succeeds, proceed to Phase 3 immediately.** Do NOT read, inspect, or evaluate the generated screenshots. Do NOT iterate on CSS fixes based on visual inspection. Quality evaluation is the evaluator SubAgent's responsibility — not yours. Your job ends when PNGs exist on disk.
+**Once the build succeeds, proceed to Phase 3 immediately.** Do NOT read, inspect, or evaluate the generated screenshots. Quality evaluation is the evaluator SubAgent's responsibility — reading your own output causes design anchoring on refinement cycles.
 
 ### Phase 3: Output
 
@@ -135,7 +138,7 @@ After successful build, report:
 - **File**: <path to .md file>
 - **Screenshots**: <list of .png paths>
 - **Slide role map**: <slide number → role (opening/divider/key message/supporting/closing)>
-- **Design summary**: <tone, palette, shape, typography choices — 3-4 sentences>
+- **Design summary**: <tone, palette, shape, typography choices — 3–4 sentences>
 ```
 
 ---
@@ -144,12 +147,7 @@ After successful build, report:
 
 ### Architecture
 
-The base theme (`themes/basicslide.css`) provides only:
-- **Design tokens**: color primitives, semantic colors, typography scale, spacing, radius, elevation
-- **Base element styles**: headings, body text, lists, blockquote, code, table, images
-- **Structural skeletons**: title/lead centering, cols grid, quote centering, image overlay
-
-It does NOT provide: component styles (flow, grid, metrics, card, badge, emphasis), title slide gradients, heading borders, invert dark mode, decorative shapes, or motifs.
+The base theme (`themes/basicslide.css`) provides design tokens (colors, typography scale, spacing, radius, elevation), base element styles (headings, lists, blockquote, code, table), and structural skeletons (title/lead centering, cols grid). It does NOT provide component styles, title slide gradients, heading borders, invert dark mode, decorative shapes, or motifs — those are yours to design.
 
 ### Color Palette
 
@@ -166,21 +164,21 @@ Override these CSS variables in the `<style>` tag:
 | `--color-primary-deep` | Invert mode dark accent |
 | `--color-surface-accent` | Emphasis box background |
 
-Color rules (single hue family, contrast ratios, banned palettes) are defined in the design-guideline. Follow them strictly.
+Single hue family, contrast ratios, and banned palettes are defined in `rules.md`.
 
 ### Bespoke Visual Design Checklist
 
 Address ALL of these — the base theme provides NO defaults:
 
-**1. Title Slide (`section.title`)** — Background treatment, typography, text color, decorative `::before`
-**2. Content Headings (`section h2`)** — Font family, border treatment, color, letter-spacing
-**3. Lead / Section Divider (`section.lead`)** — Background, typography, distinctive element
-**4. Background & Atmosphere** — Content slide background, variation between roles
-**5. Decorative Shapes** — Bespoke `::before`/`clip-path`/gradients embodying the message. No shapes is valid
-**6. Component Styles** (if used) — flow, metrics, grid, card, emphasis, badge must be fully styled. Every component needs both internal spacing (`gap`, `padding`) AND external spacing (`margin-bottom: 32px+`) when followed by other content
-**7. Dark Variant (`section.invert`)** (if used) — Background, text, border, component adaptations
-**8. Vertical Space Utilization** — 70-90% of 720px viewport. Size components relative to viewport
-**9. Spacing & Rhythm** — Padding per slide type, vertical alignment, density
+1. **Title Slide (`section.title`)** — Background treatment, typography, text color, decorative `::before`
+2. **Content Headings (`section h2`)** — Font family, border treatment, color, letter-spacing. Body text 22px minimum. Japanese uses color accent for `*emphasis*`, never italic
+3. **Lead / Section Divider (`section.lead`)** — Background, typography, distinctive element
+4. **Background & Atmosphere** — Content slide background, variation between roles
+5. **Decorative Shapes** — Bespoke `::before` / `clip-path` / gradients embodying the message. **No shapes is valid**
+6. **Component Styles** (if used) — flow, metrics, grid, card, emphasis, badge must be fully styled. Every component needs internal spacing (`gap`, `padding`) AND external spacing (`margin-bottom: 32px+`) when followed by other content
+7. **Dark Variant (`section.invert`)** (if used) — Background, text, border, component adaptations
+8. **Vertical Balance** — Whitespace volume is a tone-driven design choice, not a fill target. When content occupies less than ~60% of the viewport, vertically center it via `padding-top: 100–130px` (`justify-content: center` does not work in Marp). Do not pad components to fill empty space — empty space serves luxury, statement, and contemplative tones intentionally
+9. **Spacing & Rhythm** — Padding per slide type, vertical alignment, density
 
 ### CSS Techniques (Marp Chromium compatible)
 
@@ -202,17 +200,7 @@ Address ALL of these — the base theme provides NO defaults:
 | Shape: dot grid texture | `section::after { background-image: radial-gradient(circle, var(--color-primary) 1.5px, transparent 1.5px); background-size: 16px 16px; opacity: 0.15; }` |
 | Shape: wave bottom | `section::before { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: var(--color-primary-light); clip-path: ellipse(55% 100% at 50% 100%); }` |
 
-**IMPORTANT**: `inset: 0` does NOT work in Marp's Chromium. Use explicit `top: 0; left: 0; width: 100%; height: 100%;`.
-
-**Marp SVG foreignObject constraints** (verified across multiple builds):
-
-| Constraint | Impact | Solution |
-|---|---|---|
-| `::before`/`::after` bars are unreliable | Decorative edge lines (vertical or horizontal) disappear unpredictably | Use `background-image: linear-gradient(...)` with `!important` instead |
-| Base `section` background-image does not apply to slides without explicit `_class` | Accent lines, textures, signal bands vanish on unclassed slides | Assign a `_class` to EVERY slide and define `background-image` on each class selector |
-| `justify-content: center` / CSS Grid centering does not work | Content stays top-aligned regardless of flex/grid settings | Use `padding-top` (100–130px) for vertical positioning |
-| Decorative lines thinner than 6px are invisible at 1280×720 | Thin accent lines vanish in PNG output and evaluator cannot detect them | Use **6px minimum width** for any decorative line element |
-| Adding `!important` to `background-color` can trigger Marp's advanced background processing | Marp applies `background: transparent !important` to the content layer, wiping all `background-image` | **Never** add `!important` to `background-color`. Only add `!important` to `background-image` and its sub-properties (`background-size`, `background-position`, `background-repeat`) |
+Several common CSS patterns break inside Marp's SVG `foreignObject` (e.g., `inset: 0`, `::before` bars, `justify-content: center`, `!important` on `background-color`). The authoritative list of constraints and workarounds lives in `{design_guideline_dir}/patterns.md` (already read in Phase 0).
 
 ### Slide Role & Intensity
 
@@ -225,23 +213,9 @@ Address ALL of these — the base theme provides NO defaults:
 | Comparison / Layout | Medium | `cols` |
 | Data / Evidence | Low | _(default)_ |
 
-**Rules:** Clear intensity curve (high → varied → high). No more than 2 consecutive slides at same intensity.
+Clear intensity curve (high → varied → high). No more than 2 consecutive slides at the same intensity.
 
-### Content Rules
-
-- **1 Page, 1 Message** — split if body exceeds 5 bullets or 3 paragraphs
-- **Typography (Japanese)**: Body 22px, `*emphasis*` = color accent (not italic), never italic for Japanese
-- **Component usage**: Sparingly. Every component used MUST be styled in style block
-
-### Anti-Patterns
-
-The design-guideline defines the full anti-pattern list (AI Slop patterns, banned visuals, content rules). Key generation-specific bans:
-
-- `motif-*` or `accent-*` classes — these exist in the reference file only, not for production
-- Copying component styles verbatim from any reference — design your own
-- Using HTML components (flow, grid, metrics) without providing their CSS in the style block
-
-**Required Variety:**
+**Required variety across the deck:**
 - At least 3 different `_class` values
 - Vary structures: lists, prose, tables, grids, flow, metrics
 - Diverse title phrasing

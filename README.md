@@ -143,7 +143,7 @@ plugins/basicslide/
 | Skill | Trigger | Description |
 |-------|---------|-------------|
 | `slide-gen` | "create slides", "make a presentation" | Full orchestration: design thinking → generation → evaluation → refinement |
-| `design-guideline` | "design guideline", "design rules" | Design principles reference (Nielsen's heuristics adapted for slides) |
+| `design-guideline` | "design guideline", "design rules" | Design principles reference — bold philosophy + perceptual (Gestalt) and strategic principles, plus visual rules and Marp layout patterns |
 
 ### Evaluation Axes
 

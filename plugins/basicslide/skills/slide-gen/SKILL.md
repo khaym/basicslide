@@ -40,12 +40,16 @@ Choose a **specific tone** that combines an abstract quality with a **concrete v
 
 | Abstract only (insufficient) | Abstract + concrete metaphor (good) |
 |---|---|
-| "high-voltage tactical" | "Void Research Terminal" — gravity anomaly monitor, matte black + violet warning lights |
+| "editorial authority" | "Weekend Broadsheet" — salmon newsprint, serif pull quotes, marine-blue accents |
 | "celebratory energy" | "Midnight Billboard" — neon signage glowing against pure black, minimal, self-illuminating |
-| "warm invitation" | "Sunday Morning Café Menu" — cream paper, hand-drawn serif, warm amber light |
-| "surgical precision" | "Operating Room Display" — sterile white, single teal accent, monospaced readouts |
+| "suspended stillness" | "Abyssal Observatory" — ink-black water, pale bio-glow, silent depth |
+| "modernist clarity" | "Constructivist Poster" — primary color fields, geometric weight, asymmetric grid |
 
-The concrete object carries visual attributes (color, density, light, spatial feel) implicitly — the worker and Step 4 will derive them. The abstract quality carries mood and emotional direction. Together they define a tone that is both specific enough to implement and expressive enough to guide design decisions.
+The concrete object carries visual attributes (color, density, light, spatial feel) implicitly; the abstract quality carries mood and direction. Together they define a tone both specific enough to implement and expressive enough to guide design.
+
+These four examples sit in different families — editorial, industrial signage, natural phenomenon, geometric composition. The metaphor space is much wider: ceremonial objects, craft materials, cinema/broadcast, textile, architecture. Let the slide's content pull you toward the family that fits — a poetry recital deserves a different world than a compliance deck.
+
+**Before committing, name a second candidate from a different family.** If your first pick is editorial or industrial, deliberately sketch one from nature, ceremony, craft, cinema, or textile — then choose the stronger fit for the content. The second candidate does not have to win; forcing it prevents default-to-safe.
 
 **Style reference** (optional but powerful): Ask the user if there's a known presentation style or brand that fits the content. When given a reference, interpret it at its most extreme — take the brand's most distinctive visual trait and amplify it. If the reference is Apple, push minimalism until it hurts. If it's Supreme, make the logo placement so bold it's almost offensive. If it's a quiet luxury brand, make the whitespace feel like a statement of wealth. The reference is a direction to sprint in, not a template to copy.
 
@@ -53,7 +57,7 @@ The concrete object carries visual attributes (color, density, light, spatial fe
 
 Define the **ONE thing** someone will remember — a **visual effect derived from the tone's metaphor**. Describe WHAT it looks like and WHERE it appears, not HOW to implement it in CSS. The worker derives the implementation from the metaphor.
 
-The UNFORGETTABLE must be **derived from the tone's metaphor**. Ask: "What visual form does this metaphor naturally produce?" The form follows the metaphor — a neon billboard produces a glowing edge, a 30th anniversary produces a ghost "30", a graph-paper notebook produces a dot grid. If your UNFORGETTABLE could be swapped into a completely different presentation without anyone noticing, it's not derived from the metaphor.
+Ask: "What visual form does this metaphor naturally produce?" The form follows the metaphor — a neon billboard produces a glowing edge, a 30th anniversary produces a ghost "30", a graph-paper notebook produces a dot grid. If your UNFORGETTABLE could be swapped into a completely different presentation without anyone noticing, it's not derived from the metaphor.
 
 The range is wide: ghost watermarks, full-surface textures, large geometric shapes, ambient gradients, typographic treatments, edge accents, or something entirely new. Do not default to any single category.
 
@@ -89,9 +93,7 @@ Write the plan as a brief outline before proceeding to Phase 2.
 
 ### Pre-flight: Environment Check
 
-Run once before the first SubAgent invocation. Skip items that already pass.
-
-The skill directory (where this SKILL.md lives) contains bundled `themes/` and `scripts/` directories. Use the path of this skill file to locate them — read the skill base directory, then copy resources to the project.
+Run once before the first SubAgent invocation; skip items that already pass, skip the whole block on refinement cycles. Bundled `themes/` and `scripts/` directories live in this skill's own directory — use this SKILL.md's path to locate and copy them to the project.
 
 #### Project Setup (first run only)
 
@@ -125,11 +127,12 @@ export default config;
 | 8 | `fc-list \| grep -i "noto.*cjk"` | Returns results | `sudo apt-get install -y -qq fonts-noto-cjk fonts-noto-cjk-extra` |
 
 **On failure**: Report the issue and stop. Do not launch SubAgents until all checks pass.
-**On refinement cycles**: Skip — environment was already verified.
 
 ### Phase 2: Generate Slides (SubAgent)
 
 Launch the `slide-gen-worker` Custom SubAgent via the Agent tool.
+
+**Before the first SubAgent launch this session**, resolve `design_guideline_dir` to an absolute path using this SKILL.md's location: `<skill base directory>/../design-guideline`. Cache the resolved path and reuse it for all worker/evaluator invocations. This prevents each SubAgent from wasting turns searching for the guideline files.
 
 **Pass ALL of the following in the prompt:**
 
@@ -139,8 +142,9 @@ Launch the `slide-gen-worker` Custom SubAgent via the Agent tool.
 4. **tone**: From Phase 1 Step 2
 5. **unforgettable**: From Phase 1 Step 3
 6. **visual_concept**: Full outline from Phase 1 Step 4
-7. **content**: Complete slide content — all text, data, structure per slide
+7. **content**: Complete slide content — all text, data
 8. **content_mode**: `default` or `verbatim` (default if omitted). Verbatim mode places all text exactly as written — no rewording, no shortening
+9. **design_guideline_dir**: resolved absolute path (see above)
 
 **Content fidelity**: Pass the user's content **verbatim** in the prompt. Do NOT summarize or rewrite it — the worker owns content fidelity (see worker's Content Fidelity section for the full rule).
 
@@ -150,19 +154,19 @@ Launch the `slide-gen-worker` Custom SubAgent via the Agent tool.
 
 The worker will read design-guideline files, generate the Marp file, build it, and return screenshot paths.
 
-### Pre-check: Font-size Compliance
+### Pre-check: Font-size Compliance (gate to Phase 3)
 
-Run `scripts/check-font-size.sh` on the generated slide file before launching the evaluator:
+Run `scripts/check-font-size.sh slides/<name>.md`. **The evaluator does not run until this check passes** — evaluating a known-FAIL state wastes a cycle because non-font findings are partially invalidated once fonts are raised. The script extracts CSS `font-size` declarations (converting rem/em to px) and checks them against design-guideline thresholds.
 
-```bash
-scripts/check-font-size.sh slides/<name>.md
-```
+- **On PASS**: Proceed to Phase 3. Include `Font-size pre-check: PASS` in the evaluator prompt.
+- **On FAIL**: Fix violations **in the main session** (do not re-launch the worker — invocation cost is high, and main-session judgment is better suited to semantic sizing). For each flagged selector, choose a size at or above the floor based on role:
+  - body text (`p`, `li`, table cells carrying prose): **≥ 22px**
+  - labels/captions (badges, small annotations): **≥ 16px**
+  - headings (h1–h4, slide titles): **≥ 34px**
+  - footnotes/page numbers: **≥ 14px**
 
-This script extracts all CSS `font-size` declarations, converts rem/em to px, and checks against design-guideline thresholds. See the script header for threshold details.
-
-- **On PASS**: Proceed to Phase 3. Include "Font-size pre-check: PASS" in the evaluator prompt.
-- **On FAIL**: Include the full violation list in the evaluator prompt so the evaluator can report them without visual pixel estimation. Also consider fixing the violations before evaluation if they are clearly wrong (e.g., body text at 19px).
-- **On error** (script not found, awk failure): Skip pre-check. Include "Font-size pre-check: skipped (script error)" in the evaluator prompt so it does not fall back to visual pixel estimation.
+  The floor is a minimum, not a target — pick the size that reads naturally for the role. If lifting a size causes overflow, reduce content or enlarge the container; do not return to a sub-floor size. Re-build, re-run pre-check, repeat until PASS. If PASS is not reached in 2 attempts, stop and report to the user (likely a structural issue requiring a slide split).
+- **On error** (script not found, awk failure): Skip pre-check. Include `Font-size pre-check: skipped (script error)` in the evaluator prompt so it does not fall back to visual pixel estimation.
 
 ### Phase 3: Evaluate (SubAgent)
 
@@ -179,6 +183,7 @@ Launch the `slide-evaluator` Custom SubAgent via the Agent tool.
 7. **Visual concept**: full outline from Phase 1 Step 4 (including whitespace intent, shape language, intensity curve)
 8. Design intent: palette description from Phase 1
 9. **Font-size pre-check results**: output from `scripts/check-font-size.sh` (PASS or violation list)
+10. **design_guideline_dir**: the same resolved absolute path used in Phase 2
 
 The evaluator reads design-guideline files and scores 4 axes (Cohesion & Rhythm, Purpose Alignment, Craft, Narrative Flow) at 1-5 each, returns top 3 issues, guideline violations, and recommends "pass", "fix and re-evaluate", or "pivot".
 
@@ -200,7 +205,7 @@ Based on Phase 3 evaluation:
 
 **Refinement principle**: When in doubt, subtract.
 
-**Direct CSS fixes**: When fixing CSS directly instead of re-launching the worker, refer to the **Marp SVG foreignObject constraints** table in `slide-gen-worker/agent.md` (`### CSS Techniques` section) for background-image requirements, explicit class requirements, and centering limitations.
+**Direct CSS fixes**: When fixing CSS directly instead of re-launching the worker, consult `design-guideline/patterns.md` for Marp CSS rendering constraints (background-image requirements, explicit class requirements, centering limitations).
 
 ---
 

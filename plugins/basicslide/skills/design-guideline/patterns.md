@@ -1,8 +1,23 @@
-# Slide Design Patterns
+# HTML Layout Patterns and Marp Constraints
 
-Reusable HTML layout patterns for common presentation needs. These patterns define **structure only** — the visual styling for each pattern must be provided in the presentation's `style` block.
+Reusable HTML layout patterns and the Marp CSS rendering constraints that shape implementation. These patterns implement the principles in [judgment.md](judgment.md) using the tokens and applied rules in [rules.md](rules.md).
 
-Reference CSS for these patterns is available at `themes/basicslide-components.css` for inspiration.
+Patterns define **structure only** — visual styling for each pattern must be provided in the presentation's `style` block. Reference CSS for these patterns is available at `themes/basicslide-components.css` for inspiration.
+
+## Table of Contents
+
+- [Selection Flow](#selection-flow)
+- [Parallel — Listing items side by side](#parallel--listing-items-side-by-side)
+- [Comparison — Showing differences between options](#comparison--showing-differences-between-options)
+- [Flow — Showing process and sequence](#flow--showing-process-and-sequence)
+- [Metric — Highlighting key numbers](#metric--highlighting-key-numbers)
+- [Data — Presenting structured information](#data--presenting-structured-information)
+- [Structural — Fixed page types](#structural--fixed-page-types)
+- [Bespoke Visual Identity — Shapes designed per presentation](#bespoke-visual-identity--shapes-designed-per-presentation)
+- [Patterns that require external graphics](#patterns-that-require-external-graphics)
+- [Marp CSS Rendering Constraints](#marp-css-rendering-constraints)
+
+---
 
 ## Selection Flow
 
@@ -33,16 +48,7 @@ Use when presenting 2-4 items at the same level of importance.
 <h4>Item Title</h4>
 <p>Brief description of this item</p>
 </div>
-<div class="grid-item">
-<div class="icon">📊</div>
-<h4>Item Title</h4>
-<p>Brief description of this item</p>
-</div>
-<div class="grid-item">
-<div class="icon">🚀</div>
-<h4>Item Title</h4>
-<p>Brief description of this item</p>
-</div>
+<!-- repeat .grid-item × 2-4 -->
 </div>
 ```
 
@@ -118,16 +124,7 @@ Use standard Markdown lists with bold lead-ins:
 <h4>Step Title</h4>
 <p>Brief description</p>
 </div>
-<div class="flow-step">
-<div class="flow-num">2</div>
-<h4>Step Title</h4>
-<p>Brief description</p>
-</div>
-<div class="flow-step">
-<div class="flow-num">3</div>
-<h4>Step Title</h4>
-<p>Brief description</p>
-</div>
+<!-- repeat .flow-step × 2-5, increment .flow-num -->
 </div>
 ```
 
@@ -158,14 +155,7 @@ Use numbered Markdown list:
 <div class="metric-value">42%</div>
 <div class="metric-label">Conversion Rate</div>
 </div>
-<div class="metric">
-<div class="metric-value">3.2x</div>
-<div class="metric-label">ROI Improvement</div>
-</div>
-<div class="metric">
-<div class="metric-value">14d</div>
-<div class="metric-label">Average Cycle Time</div>
-</div>
+<!-- repeat .metric × 2-4 -->
 </div>
 ```
 
@@ -195,24 +185,7 @@ Use text with mathematical symbols:
 **Unit Economics** = *LTV* ÷ *CAC*
 ```
 
-Or for visual emphasis, use the metric pattern with an operator:
-
-```html
-<div class="metrics">
-<div class="metric">
-<div class="metric-value">LTV</div>
-<div class="metric-label">Lifetime Value</div>
-</div>
-<div class="metric">
-<div class="metric-value">÷</div>
-<div class="metric-label"></div>
-</div>
-<div class="metric">
-<div class="metric-value">CAC</div>
-<div class="metric-label">Acquisition Cost</div>
-</div>
-</div>
-```
+Or for visual emphasis, use the metric pattern with operator metrics (an `.metric` whose `.metric-value` is `÷` / `×` / `=` and `.metric-label` is empty) interleaved between operand metrics.
 
 **When to use**: Defining KPIs, showing relationships between business metrics.
 
@@ -260,14 +233,14 @@ Contact: name@example.com
 
 Each presentation designs its own visual identity in the `style` block. Shapes and decorative elements are created bespoke using CSS techniques — not selected from pre-built templates.
 
-### Design Approach
+**Design approach**:
 
 1. **Start from the message**: What emotion or concept should the shape embody?
 2. **Choose a technique**: `::before` / `::after` pseudo-elements, `clip-path`, `linear-gradient`, `radial-gradient`, `border` tricks
-3. **Apply with intensity curve**: Bold shapes on title/lead slides, subtle on content slides
+3. **Apply with intensity curve**: Bold shapes on title/lead slides, subtle on content slides (see [rules.md §5 Motif Intensity as Elevation](rules.md#5-elevation))
 4. **Validate**: Does the shape serve the message, or is it decoration? If decoration, remove it
 
-### Shape Techniques Reference
+**Shape technique reference**:
 
 | Technique | CSS Property | Best For |
 |---|---|---|
@@ -278,33 +251,32 @@ Each presentation designs its own visual identity in the `style` block. Shapes a
 | Flowing curves | `clip-path: ellipse()` or `clip-path: polygon()` | Waves, organic shapes |
 | Color bands | `linear-gradient(to direction, transparent X%, color X%)` | Side/top accents |
 
-### Intensity by Slide Role
-
-| Slide Role | Shape Intensity | Example |
-|---|---|---|
-| Title (opening/closing) | Bold | Large corner triangle, full diagonal band, prominent circle |
-| Lead (section divider) | Moderate | Medium shape, tinted background |
-| Content (standard) | Subtle or none | Thin line, small dot pattern, or clean baseline |
-| Data (tables, lists) | None | Data speaks — decoration recedes |
-
-### When NOT to Use Shapes
-
-A presentation with **no shapes** but excellent typography, color, and spacing is a valid and often superior design choice. Shapes should enhance the message — if they don't clearly serve a purpose, omit them.
-
-### Reference Baselines (Historical)
-
-Pre-built motif classes (`motif-geometric`, `motif-organic`, `motif-bold`) and accent shapes (`accent-triangle`, `accent-circle`, etc.) exist in `themes/basicslide-components.css` as comparison baselines. These should NOT be used in new presentations — they represent the template-based approach that bespoke design supersedes
+**When NOT to use shapes**: A presentation with **no shapes** but excellent typography, color, and spacing is a valid and often superior design choice. Shapes should enhance the message — if they don't clearly serve a purpose, omit them.
 
 ---
 
-## Patterns NOT supported in Marp
+## Patterns that require external graphics
 
-The following patterns from c-slide require graphical elements beyond HTML/CSS:
+The following patterns require graphical elements beyond HTML/CSS. Prepare the graphic externally and embed with `![alt](path)`:
 
-- **Cycle diagrams** (circular flow) — Use `flow` with text note "this cycle repeats"
-- **Venn diagrams** (overlapping sets) — Use a table showing shared/unique attributes
-- **Pyramid / Funnel** — Use a numbered list from broad to narrow, or embed an image
-- **Tree diagrams** (org charts) — Use indented lists, or embed an image
-- **Charts** (bar, pie, line) — Embed pre-rendered chart images
+- **Cycle diagrams** (circular flow) — alternative: Use `flow` with text note "this cycle repeats"
+- **Venn diagrams** (overlapping sets) — alternative: Use a table showing shared/unique attributes
+- **Pyramid / Funnel** — alternative: Use a numbered list from broad to narrow
+- **Tree diagrams** (org charts) — alternative: Use indented lists
+- **Charts** (bar, pie, line) — embed pre-rendered chart images
 
-For these, prepare the graphic externally and embed with `![alt](path)`.
+---
+
+## Marp CSS Rendering Constraints
+
+Marp renders slides inside an SVG `foreignObject`, which breaks several common CSS techniques. These constraints are verified across multiple builds — use the Solution column instead of the unsupported pattern.
+
+| Constraint | Impact | Solution |
+|---|---|---|
+| `::before` / `::after` bars are unreliable | Decorative edge lines (vertical or horizontal) disappear unpredictably | Use `background-image: linear-gradient(...)` with `!important` instead |
+| Base `section` background-image does not apply to slides without explicit `_class` | Accent lines, textures, signal bands vanish on unclassed slides | Assign a `_class` to EVERY slide and define `background-image` on each class selector |
+| `justify-content: center` / CSS Grid centering does not work | Content stays top-aligned regardless of flex/grid settings | Use `padding-top` (100–130px) for vertical positioning |
+| `inset: 0` does not work | Positioning shorthand is ignored | Use explicit `top: 0; left: 0; width: 100%; height: 100%;` |
+| Decorative lines thinner than 6px are invisible at 1280×720 | Thin accent lines vanish in PNG output and evaluator cannot detect them | Use **6px minimum width** for any decorative line element |
+| Adding `!important` to `background-color` triggers Marp's advanced background processing | Marp applies `background: transparent !important` to the content layer, wiping all `background-image` | **Never** add `!important` to `background-color`. Only add `!important` to `background-image` and its sub-properties |
+| `flex: 1` on flex items can collapse to zero width | Item disappears or shrinks unexpectedly inside Marp's section flex context | Set explicit `width` (or `min-width`) instead of relying on `flex: 1` |

@@ -3,7 +3,7 @@
 #
 # Usage: scripts/check-font-size.sh slides/foo.md
 #
-# Thresholds (from design-guideline/visual-rules.md Accessibility Baseline):
+# Thresholds (from design-guideline/rules.md Accessibility Baseline):
 #   Body text (p, li):       >= 22px (--font-size-base)
 #   Headings (h1-h4):        >= 34px (--font-size-xl)
 #   Captions/labels:         >= 16px (--font-size-sm)

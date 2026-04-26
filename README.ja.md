@@ -143,7 +143,7 @@ plugins/basicslide/
 | スキル | トリガー | 説明 |
 |--------|---------|------|
 | `slide-gen` | "create slides", "スライドを作って" | フルオーケストレーション: デザイン思考 → 生成 → 評価 → 改善 |
-| `design-guideline` | "design guideline", "デザインルール" | デザイン原則リファレンス（ニールセンのヒューリスティクスをスライド向けに適用） |
+| `design-guideline` | "design guideline", "デザインルール" | デザイン原則リファレンス — Bold デザイン哲学 + 知覚原則（Gestalt）+ 戦略原則、加えてビジュアルルールと Marp レイアウトパターン |
 
 ### 評価軸
 
